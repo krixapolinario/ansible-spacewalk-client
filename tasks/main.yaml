@@ -42,7 +42,7 @@
   shell: rhnreg_ks --activationkey {{ activation_key }} --serverUrl https://{{ spacewalk_server_fqdn }}/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT
 
 - name: Enable the remote actions
-  shell: rhn-actions-control --enable-all
+  command: rhn-actions-control --enable-all
 
 - name: Set time to update
   lineinfile:

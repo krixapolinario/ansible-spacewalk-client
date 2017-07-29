@@ -13,14 +13,13 @@ Prerequisites
 Usage
 -----
 
-Access the spacewalk playbook and fill the configuration files according to your needs:
+Clone this repository:
 
-   * Adjust the clients information on hosts file
-      * NOTE: It's possible to install more than one client at the same time.
+git clone https://github.com/krixapolinario/ansible-spacewalk-client.git
 
-   * Adjust the configuration information to client on defaults/main.yaml
-      * NOTE_1: If you don't set any one of those variables the instalation won't work.
-      * NOTE_2: The variable spacewalk_server_fqdn needs to be a FQDN and you don't need to set the http:// or https://.
+Adjust the configuration information to client on defaults/main.yaml
+   * NOTE_1: If you don't set any one of those variables the instalation won't work.
+   * NOTE_2: The variable spacewalk_server_fqdn needs to be a FQDN and you don't need to set the http:// or https://.
 
 Resources
 ---------
