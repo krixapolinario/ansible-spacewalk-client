@@ -1,0 +1,51 @@
+#
+# Authors: Krix Apolinario <krixapolinario@gmail.com>
+#
+# Description: Simples Ansible Playbook to install a Spacewalk 2.6 Client
+#
+
+---
+
+- name: Check OS version and family
+  fail:
+      msg: This playbook is only functional on CentOS 7 distribution
+  when:
+    - ansible_distribution == 'CentOS'
+    - ansible_distribution_major_version | version_compare('7', '!=')
+
+- name: Copy repo files to yum.repos.d
+  copy:
+    src: etc/yum.repos.d/
+    dest: /etc/yum.repos.d/
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install needed packages
+  yum: name={{ item }} state=latest
+  with_items:
+    - spacewalk-abrt
+    - rhncfg-actions
+    - yum-rhn-plugin
+    - spacewalk-oscap
+    - scap-security-guide
+    - openscap
+    - openscap-utils
+
+- name: Download the server certificate
+  get_url:
+    url: http://{{ spacewalk_server_fqdn }}/pub/RHN-ORG-TRUSTED-SSL-CERT
+    dest: /usr/share/rhn/
+    mode: 0644
+
+- name: Registering machine on server
+  shell: rhnreg_ks --activationkey {{ activation_key }} --serverUrl https://{{ spacewalk_server_fqdn }}/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT
+
+- name: Enable the remote actions
+  shell: rhn-actions-control --enable-all
+
+- name: Set time to update
+  lineinfile:
+    dest: /etc/sysconfig/rhn/rhnsd
+    regexp: "^INTERVAL"
+    line: "INTERVAL=60"

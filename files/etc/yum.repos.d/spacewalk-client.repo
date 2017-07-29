@@ -1,0 +1,6 @@
+[spacewalk-client]
+name=Spacewalk Client Tools
+baseurl=http://yum.spacewalkproject.org/2.6-client/RHEL/7/$basearch/
+gpgkey=http://yum.spacewalkproject.org/RPM-GPG-KEY-spacewalk-2015
+enabled=1
+gpgcheck=1

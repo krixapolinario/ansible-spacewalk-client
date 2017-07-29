@@ -1,0 +1,4 @@
+---
+# Define server information to client
+spacewalk_server_fqdn: spacewalk.domain.io
+activation_key: 1-centos-machines
