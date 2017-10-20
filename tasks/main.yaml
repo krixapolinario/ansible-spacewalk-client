@@ -28,9 +28,10 @@
     - rhncfg-actions
     - yum-rhn-plugin
     - spacewalk-oscap
-    - scap-security-guide
     - openscap
     - openscap-utils
+    - openscap-daemon
+    - scap-security-guide
 
 - name: Download the server certificate
   get_url:
@@ -39,13 +40,19 @@
     mode: 0644
 
 - name: Registering machine on server
-  shell: rhnreg_ks --activationkey {{ activation_key }} --serverUrl https://{{ spacewalk_server_fqdn }}/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT
+  shell: rhnreg_ks --force --activationkey {{ activation_key }} --serverUrl https://{{ spacewalk_server_fqdn }}/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT
 
 - name: Enable the remote actions
-  command: rhn-actions-control --enable-all
+  shell: rhn-actions-control --enable-all
 
 - name: Set time to update
   lineinfile:
     dest: /etc/sysconfig/rhn/rhnsd
     regexp: "^INTERVAL"
     line: "INTERVAL=60"
+
+- name: Set FQDN
+  lineinfile:
+    dest: /etc/sysconfig/rhn/up2date
+    regexp: '^serverURL'
+    line: 'serverURL=https://{{ spacewalk_server_fqdn }}/XMLRPC'
